@@ -1,0 +1,78 @@
+*
+{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body
+{
+    display: flex;
+    width: 100vw;
+    gap: 10px;
+    background-color: rgb(41, 38, 38);
+    color: rgb(211, 205, 205);
+    padding: 10px;
+}
+
+
+#booksListWrap
+{
+    display: flex;
+    flex-direction: column;
+    width: 40vw;
+    border: 1px solid;
+    padding: 10px;
+    gap: 10px;
+}
+#booksListWrap > h3
+{
+    font-size: 1.5rem;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#search-wrap
+{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 3px;
+}
+#search-wrap > input
+{
+    width: 50%;
+}
+#inputWrap
+{
+    display: flex;
+    flex-direction: row;
+}
+
+#booksList
+{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+.book
+{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: rgb(63, 54, 43);
+    padding: 10px;
+    border-radius: 1rem;
+}
+
+#add-book
+{
+    display: flex;
+    flex-direction: column;
+    width: 40vw;
+    height: fit-content;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid;
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div id="booksListWrap">
+        <h3>Список книг</h3>
+
+        <div id="search-wrap">
+            <label for="search">Поиск по названию</label>
+            <div id="inputWrap">
+                <input type="text" id="search" name="search">
+                <button id="searchBtn">Найти</button>
+            </div>
+            <p id="search-status"></p>    
+        </div>
+        
+
+        <div id="booksList"></div>
+    </div>
+    
+
+    <form action="" id="add-book">
+        <h3>Добавление книги</h3>
+
+        <input type="text" name="title" placeholder="Название.." required>
+        <input type="text" name="author" placeholder="Автор.." required>
+        <input type="number" name="year" placeholder="Год издания.." required>
+        <input type="submit" value="Добавить">
+    </form>
+</body>
+</html>
