@@ -3,8 +3,12 @@ const addForm = document.querySelector("#add-book");
 const inputSearch = document.querySelector("#search");
 const searchBtn = document.querySelector("#searchBtn");
 const searchStatus = document.querySelector("#search-status");
+const availableCheckbox = document.querySelector("#isAvailable");
 
+// books меняется формой и явл. полным списком книг в текущей сессии до ф5
+// currentList - текущий отфильтрованный books, которое ищет пользователь
 
+let currentList;
 
 let books = [
  { id: 1, title: "Мастер и Маргарита",
@@ -40,7 +44,6 @@ addForm.addEventListener("submit", (e) =>
     })
 
 
-
 searchBtn.addEventListener("click", () =>
     {
         let inputTitle = inputSearch.value.toLowerCase();
@@ -49,6 +52,18 @@ searchBtn.addEventListener("click", () =>
         // передаем массив с запрошенными названиями
         if (foundedBooks.length > 0) {loadList(foundedBooks); searchStatus.textContent = "";}
         if (foundedBooks.length == 0) searchStatus.textContent = "Книг не найдено"
+    })
+availableCheckbox.addEventListener("change", () =>
+    {
+        if (availableCheckbox.checked)
+            {
+                // loadList() хранит list (т.к return)
+                availableBooks = currentList.filter(b => b.available == true);
+
+                if (availableBooks.length > 0) {loadList(availableBooks); searchStatus.textContent = "";}
+                if (availableBooks.length == 0) searchStatus.textContent = "Книг в наличии нет";
+            }
+        if (!availableCheckbox.checked) {currentList = books; loadList(currentList);}
     })
 
 
@@ -82,5 +97,18 @@ function loadList(list)
         if (b.available) {status.textContent = "В наличии"; status.style.color = "green";}
         if (!b.available) {status.textContent = "Выдана"; status.style.color = "red";}
         bookDiv.appendChild(status);
+
+        let statusBtn = document.createElement('button');
+        statusBtn.classList.add("statusBtn");
+        statusBtn.textContent = "Изменить статус"
+        statusBtn.addEventListener('click', (e) =>
+            {
+                e.preventDefault();
+
+                if (b.available) {b.available = false; status.textContent = "Выдана"; status.style.color = "red"; return;}
+                if (!b.available) {b.available = true; status.textContent = "В наличии"; status.style.color = "green"; return;}
+            })
+        bookDiv.appendChild(statusBtn);
     });
+    currentList = list;
 }
