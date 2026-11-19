@@ -4,8 +4,13 @@ const inputSearch = document.querySelector("#search");
 const searchBtn = document.querySelector("#searchBtn");
 const searchStatus = document.querySelector("#search-status");
 const availableCheckbox = document.querySelector("#isAvailable");
+const totalCount = document.querySelector(".totalCount");
+const availableCount = document.querySelector(".availableCount");
+const unavailableCount = document.querySelector(".unavailableCount");
 
 // books меняется формой и явл. полным списком книг в текущей сессии до ф5
+// в процессе books менятся на foundedBooks/availableBooks/currentList
+// и передаётся в loadList()
 // currentList - текущий отфильтрованный books, которое ищет пользователь
 
 let currentList;
@@ -41,6 +46,7 @@ addForm.addEventListener("submit", (e) =>
         }
         books.push(book);
         loadList(books);
+        addForm.reset();
     })
 
 
@@ -57,13 +63,25 @@ availableCheckbox.addEventListener("change", () =>
     {
         if (availableCheckbox.checked)
             {
+                
                 // loadList() хранит list (т.к return)
-                availableBooks = currentList.filter(b => b.available == true);
+                currentAvailableBooks = currentList.filter(b => b.available == true);
 
-                if (availableBooks.length > 0) {loadList(availableBooks); searchStatus.textContent = "";}
-                if (availableBooks.length == 0) searchStatus.textContent = "Книг в наличии нет";
+                // задаем totalCount ПОСЛЕ прогрузки отфильтрованного списка, обращаясь к полному (books).
+                if (currentAvailableBooks.length > 0) {loadList(currentAvailableBooks); totalCount.textContent = "Всего: " + books.length; searchStatus.textContent = "";}
+                if (currentAvailableBooks.length == 0) {searchStatus.textContent = "Книг в наличии нет"; listDiv.innerHTML = "";}
+                
             }
-        if (!availableCheckbox.checked) {currentList = books; loadList(currentList);}
+        if (!availableCheckbox.checked) 
+        {
+            // возвращаем тот же список отталкиваясь от написанного в inputTitle
+            let inputTitle = inputSearch.value.toLowerCase();
+            foundedBooks = books.filter(b => b.title.toLowerCase().includes(inputTitle));
+            loadList(foundedBooks);
+            availableCount.textContent = "В наличии: " + books.filter(b => b.available == true).length;
+            unavailableCount.textContent = "Выдано: " + books.filter(b => b.available == false).length;
+        }
+        
     })
 
 
@@ -98,17 +116,67 @@ function loadList(list)
         if (!b.available) {status.textContent = "Выдана"; status.style.color = "red";}
         bookDiv.appendChild(status);
 
+
+        // враппер кнопок
+        let divBtns = document.createElement('div');
+        divBtns.classList.add('divBtns');
+        bookDiv.appendChild(divBtns);
+
+        // Кнопка изменения статуса книги
         let statusBtn = document.createElement('button');
         statusBtn.classList.add("statusBtn");
-        statusBtn.textContent = "Изменить статус"
+
+        // корректное создание кнопок
+        if (b.available) {status.textContent = "В наличии"; status.style.color = "green"; statusBtn.textContent = "Выдать";}
+        if (!b.available) {status.textContent = "Выдана"; status.style.color = "red"; statusBtn.textContent = "Вернуть";}
         statusBtn.addEventListener('click', (e) =>
             {
                 e.preventDefault();
+                // изменение статуса с пом. кнопки
+                if (b.available) 
+                    {
+                    b.available = false;
+                    status.textContent = "Выдана"; 
+                    status.style.color = "red"; 
+                    statusBtn.textContent = "Вернуть";
+                    availableCount.textContent = "В наличии: " + list.filter(b => b.available == true).length;
+                    unavailableCount.textContent = "Выдано: " + list.filter(b => b.available == false).length; 
+                    return;
+                }
+                if (!b.available) {
+                    b.available = true; 
+                    status.textContent = "В наличии"; 
+                    status.style.color = "green"; 
+                    statusBtn.textContent = "Выдать";
+                    availableCount.textContent = "В наличии: " + list.filter(b => b.available == true).length;
+                    unavailableCount.textContent = "Выдано: " + list.filter(b => b.available == false).length; 
+                    return;}
 
-                if (b.available) {b.available = false; status.textContent = "Выдана"; status.style.color = "red"; return;}
-                if (!b.available) {b.available = true; status.textContent = "В наличии"; status.style.color = "green"; return;}
             })
-        bookDiv.appendChild(statusBtn);
+        divBtns.appendChild(statusBtn);
+
+        // Кнопка удаления книги
+
+        let deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('deleteBtn');
+        deleteBtn.textContent = 'Удалить';
+        deleteBtn.addEventListener('click', (e) =>
+            {
+                e.preventDefault();
+                let bookIndex = currentList.findIndex((book) => book.id === b.id); // b - текущая книга по итерации forEach
+                currentList.splice(bookIndex, 1);
+                loadList(currentList);
+
+                totalCount.textContent = "Всего: " + books.length;
+                availableCount.textContent = "В наличии: " + list.filter(b => b.available == true).length;
+                unavailableCount.textContent = "Выдано: " + list.filter(b => b.available == false).length;
+            })
+
+        divBtns.appendChild(deleteBtn);
+        
+        totalCount.textContent = "Всего: " + books.length;
+        availableCount.textContent = "В наличии: " + books.filter(b => b.available == true).length;
+        unavailableCount.textContent = "Выдано: " + books.filter(b => b.available == false).length;
     });
     currentList = list;
 }

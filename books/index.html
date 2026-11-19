@@ -8,17 +8,30 @@
     <script src="script.js" defer></script>
 </head>
 <body>
+
     <div id="booksListWrap">
         <h3>Список книг</h3>
+
+        <div class="statistics">
+            <div class="totalCount"></div>
+            <div class="availableCount"></div>
+            <div class="unavailableCount"></div>
+        </div>
 
         <div id="search-wrap">
             <label for="search">Поиск по названию</label>
             <div id="inputWrap">
-                <input type="text" id="search" name="search">
-                <button id="searchBtn">Найти</button>
+                <div id="searchTitleWrap">
+                    <input type="text" id="search" name="search">
+                    <button id="searchBtn">Найти</button>
+                </div>
+                
 
-                <label for="isAvailable">Показать только в наличии</label>
-                <input type="checkbox" name="isAvailable" id="isAvailable">
+                <div id="availableWrap">
+                    <label for="isAvailable">Показать только в наличии</label>
+                    <input type="checkbox" name="isAvailable" id="isAvailable">
+                </div>
+                
             </div>
             <p id="search-status"></p>    
         </div>

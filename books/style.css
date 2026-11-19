@@ -47,7 +47,28 @@ body
 {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
 }
+#searchTitleWrap
+{
+    display: flex;
+}
+#availableWrap
+{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+#availableWrap > label
+{
+    font-size: 1.15rem;
+}
+#availableWrap > input
+{
+    width: 30px;
+    height: 30px;
+}
+
 
 #booksList
 {
@@ -64,6 +85,16 @@ body
     background-color: rgb(63, 54, 43);
     padding: 10px;
     border-radius: 1rem;
+}
+.divBtns
+{
+    display: flex;
+    width: 40%;
+    gap: 10px;
+}
+.divBtns button
+{
+    width: 50%;
 }
 
 #add-book
