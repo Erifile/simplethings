@@ -98,7 +98,7 @@ while True:
   print(f"№ |Ф.И.О|Группа|Оценки")
   for num, student in sorted_students.items():
       print(f"{num}. {student}")
+  
 
 
-    
     
